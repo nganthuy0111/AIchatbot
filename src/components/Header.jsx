@@ -2,19 +2,13 @@ import React from "react";
 import logo from "../assets/logoEduLawAI.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import axios from "../api/axios";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await axios.post("/auth/logout");
-    } catch (err) {
-      // Optionally handle error
-    }
-    logout();
+    await logout(); // chỉ gọi logout từ context
     navigate("/login");
   };
 
@@ -32,8 +26,8 @@ const Header = () => {
         <Link to="/about" className="hover:text-gray-300">
           About
         </Link>
-        <Link to="/pricing" className="hover:text-gray-300">
-          Pricing
+        <Link to="/feedback" className="hover:text-gray-300">
+          Feedback
         </Link>
         <Link to="/blog" className="hover:text-gray-300">
           Blog

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
+import apiClient from "../api/axios";
 
 const AuthContext = createContext(null);
 
@@ -20,7 +21,17 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("account_id", userData.account_id); // Lưu cả account_id
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const token = user?.token || localStorage.getItem("token");
+      if (token) {
+        await apiClient.post("/auth/logout", {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+    } catch (err) {
+      // Có thể log lỗi hoặc bỏ qua nếu backend không yêu cầu logout
+    }
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("account_id"); // Xoá account_id khi logout
