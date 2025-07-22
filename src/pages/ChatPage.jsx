@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import axios from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 
@@ -28,18 +29,27 @@ const ChatPage = () => {
       if (res.status === 201) {
         setMessages((msgs) => [
           ...msgs,
-          { sender: "bot", text: "Your question has been sent! Please wait for the answer." },
+          {
+            sender: "bot",
+            text: "Your question has been sent! Please wait for the answer.",
+          },
         ]);
       } else {
         setMessages((msgs) => [
           ...msgs,
-          { sender: "bot", text: "Sorry, there was a problem sending your question." },
+          {
+            sender: "bot",
+            text: "Sorry, there was a problem sending your question.",
+          },
         ]);
       }
     } catch (err) {
       setMessages((msgs) => [
         ...msgs,
-        { sender: "bot", text: "Error: Unable to send question. Please try again later." },
+        {
+          sender: "bot",
+          text: "Error: Unable to send question. Please try again later.",
+        },
       ]);
     }
     setLoading(false);
@@ -92,6 +102,7 @@ const ChatPage = () => {
           </form>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

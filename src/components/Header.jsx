@@ -2,12 +2,18 @@ import React from "react";
 import logo from "../assets/logoEduLawAI.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axios from "../api/axios";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await axios.post("/auth/logout");
+    } catch (err) {
+      // Optionally handle error
+    }
     logout();
     navigate("/login");
   };
@@ -20,11 +26,11 @@ const Header = () => {
       </Link>
 
       <nav className="flex items-center space-x-6">
-        <Link to="/how-it-works" className="hover:text-gray-300">
-          How it works
+        <Link to="/" className="hover:text-gray-300">
+          Home
         </Link>
-        <Link to="/features" className="hover:text-gray-300">
-          Features
+        <Link to="/about" className="hover:text-gray-300">
+          About
         </Link>
         <Link to="/pricing" className="hover:text-gray-300">
           Pricing
@@ -44,14 +50,7 @@ const Header = () => {
             Log Out
           </button>
         </div>
-      ) : (
-        <Link
-          to="/login"
-          className="bg-green-400 text-black py-2 px-4 rounded-md font-semibold hover:bg-green-500 transition-colors"
-        >
-          Start Consulting &rarr;
-        </Link>
-      )}
+      ) : null}
 
       <button className="md:hidden">
         <svg

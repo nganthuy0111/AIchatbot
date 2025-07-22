@@ -9,6 +9,7 @@ import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChatPage from "./pages/ChatPage";
+import AboutPage from "./pages/AboutPage";
 import "./App.css";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/about" element={<AboutPage />} />
         {/* Add other routes here in the future */}
       </Routes>
     </Router>
