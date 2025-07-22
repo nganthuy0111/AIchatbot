@@ -23,7 +23,7 @@ const ChatPage = () => {
     try {
       const res = await axios.post("/questions", {
         question_content: input,
-        account_id: user?.token ? user.token : null, // Nếu không có token thì gửi null
+        account_id: user?.account_id || localStorage.getItem("account_id") || null, // Lấy đúng account_id
       });
       if (res.status === 201) {
         setMessages((msgs) => [
