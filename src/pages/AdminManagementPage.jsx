@@ -12,8 +12,6 @@ const menuItems = [
   { key: "dashboard", label: "Dashboard" },
   { key: "users", label: "User Management" },
   { key: "feedback", label: "Feedback Management" },
-  { key: "chat", label: "Chat Management" },
-  { key: "questions", label: "User Questions" },
   { key: "legalClause", label: "Legal Clause" },
   { key: "legalDocument", label: "Legal Document" },
 ];
@@ -35,9 +33,14 @@ const AdminManagementPage = () => {
           <img
             src={logo}
             alt="Logo"
-            className="w-10 h-10 mr-2 object-contain bg-white rounded-full p-1"
+            className="w-10 h-10 mr-2 object-contain"
           />
-          <span className="font-bold text-xl">ELA</span>
+          <span
+            className="font-bold text-xl cursor-pointer transition-colors hover:text-green-400"
+            onClick={() => (window.location.href = "/")}
+          >
+            ELA
+          </span>
         </div>
         {/* User Info */}
         <div className="flex flex-col items-center mb-8">
@@ -46,7 +49,6 @@ const AdminManagementPage = () => {
             alt="avatar"
             className="w-14 h-14 rounded-full mb-2 border-2 border-green-400"
           />
-          <span className="font-semibold">{user?.account_id || "Admin"}</span>
           <span className="text-xs text-gray-300">Welcome</span>
         </div>
         {/* Search */}
@@ -96,6 +98,7 @@ const AdminManagementPage = () => {
             </button>
           </div>
           <div className="flex items-center space-x-4">
+            {/* Chỉ giữ lại một chuông thông báo, xóa nút chuông thứ hai */}
             <button className="relative">
               <span className="absolute -top-1 -right-1 bg-green-400 rounded-full w-3 h-3 border-2 border-black"></span>
               <svg
@@ -108,8 +111,12 @@ const AdminManagementPage = () => {
                 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </button>
-            <button className="relative">
-              <span className="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 border-2 border-black"></span>
+            {/* Icon user chuyển sang trang profile */}
+            <button
+              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-green-400 transition-colors"
+              title="Profile"
+              onClick={() => (window.location.href = "/profile")}
+            >
               <svg
                 className="w-6 h-6 text-white"
                 fill="none"
@@ -117,10 +124,20 @@ const AdminManagementPage = () => {
                 strokeWidth="2"
                 viewBox="0 0 24 24"
               >
-                <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
               </svg>
             </button>
-            <span className="font-semibold">{user?.account_id || "Admin"}</span>
+            {/* Bỏ hiển thị id, chỉ giữ lại chữ Admin */}
+            <span className="font-semibold">Admin</span>
           </div>
         </header>
         {/* Main Content */}
@@ -133,13 +150,13 @@ const AdminManagementPage = () => {
             <div className="col-span-3">
               <FeedbackManagement />
             </div>
-          ) : selectedMenu === "chat" ? (
+          ) : selectedMenu === "legalClause" ? (
             <div className="col-span-3">
-              <ChatManagement />
+              <LegalDocumentList />
             </div>
           ) : selectedMenu === "legalDocument" ? (
             <div className="col-span-3">
-              <LegalDocumentList />
+              <LegalDocumentUpload />
             </div>
           ) : (
             <>

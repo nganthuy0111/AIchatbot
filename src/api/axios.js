@@ -2,7 +2,13 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: "https://be-edulaw-production.up.railway.app/api",
-  timeout: 10000, // 10 seconds timeout
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+const apiChatbotLawClient = axios.create({
+  baseURL: "https://aichatbotlaw.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -24,3 +30,4 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
+export { apiChatbotLawClient };

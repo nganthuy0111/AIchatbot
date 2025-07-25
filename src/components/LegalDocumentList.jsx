@@ -1,126 +1,65 @@
 import React, { useEffect, useState } from "react";
-import apiClient from "../api/axios";
-import LegalDocumentUpload from "./LegalDocumentUpload";
-
-function formatDate(dateStr) {
-  if (!dateStr) return "";
-  const d = new Date(dateStr);
-  return d.toLocaleDateString();
-}
+import { apiChatbotLawClient } from "../api/axios";
 
 const LegalDocumentList = () => {
-  const [docs, setDocs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showUpload, setShowUpload] = useState(false);
-
-  const fetchDocs = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await apiClient.get("/legal-docs", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setDocs(res.data);
-    } catch (err) {
-      setError("Không thể tải danh sách văn bản.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchDocs();
+    const fetchData = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await apiChatbotLawClient.get("/Legal");
+        setData(Array.isArray(res.data) ? res.data : []);
+      } catch {
+        setError("Failed to load legal clauses.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
-  // Khi upload thành công, reload lại danh sách và đóng modal
-  const handleUploadSuccess = () => {
-    setShowUpload(false);
-    fetchDocs();
-  };
-
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-white">
-          Danh sách văn bản pháp luật
-        </h2>
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded font-semibold"
-          onClick={() => setShowUpload(true)}
-        >
-          Tạo mới
-        </button>
-      </div>
+    <div className="max-w-3xl mx-auto bg-white rounded shadow p-6">
+      <h2 className="text-xl font-bold mb-4 text-black">Legal Clauses</h2>
       {loading ? (
-        <div className="text-white">Đang tải danh sách...</div>
+        <div className="text-gray-700">Loading...</div>
       ) : error ? (
-        <div className="text-red-400">{error}</div>
+        <div className="text-red-500">{error}</div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded shadow text-sm">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b">Tên văn bản</th>
-                <th className="py-2 px-4 border-b">Loại</th>
-                <th className="py-2 px-4 border-b">Ngày ban hành</th>
-                <th className="py-2 px-4 border-b">Người ký</th>
-                <th className="py-2 px-4 border-b">File</th>
-              </tr>
-            </thead>
-            <tbody>
-              {docs && docs.length > 0 ? (
-                docs.map((doc) => (
-                  <tr key={doc._id || doc.id} className="hover:bg-gray-100">
-                    <td className="py-2 px-4 border-b">{doc.document_name}</td>
-                    <td className="py-2 px-4 border-b">{doc.document_type}</td>
-                    <td className="py-2 px-4 border-b">
-                      {formatDate(doc.document_date_issue)}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {doc.document_signee || ""}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {doc.file_url ? (
-                        <a
-                          href={doc.file_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          Tải về
-                        </a>
-                      ) : (
-                        <span className="text-gray-400">Không có file</span>
+        <div className="space-y-4">
+          {data.map((chapter) => (
+            <div key={chapter.id} className="mb-4">
+              <div className="font-bold text-green-700 text-lg mb-2">
+                {chapter.title}
+              </div>
+              {chapter.clauses && chapter.clauses.length > 0 && (
+                <div className="ml-4 space-y-2">
+                  {chapter.clauses.map((clause) => (
+                    <div key={clause.id}>
+                      <div className="font-semibold text-black">
+                        {clause.title}
+                      </div>
+                      {clause.clauseItems && clause.clauseItems.length > 0 && (
+                        <ul className="ml-4 list-disc text-gray-700">
+                          {clause.clauseItems.map((item, idx) => (
+                            <li key={item.id || idx}>
+                              {typeof item === "object" && item !== null
+                                ? item.text || JSON.stringify(item)
+                                : item}
+                            </li>
+                          ))}
+                        </ul>
                       )}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="py-4 text-center text-gray-500">
-                    Không có văn bản nào.
-                  </td>
-                </tr>
+                    </div>
+                  ))}
+                </div>
               )}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {/* Modal upload */}
-      {showUpload && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded shadow-lg p-6 relative w-full max-w-lg">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
-              onClick={() => setShowUpload(false)}
-            >
-              &times;
-            </button>
-            <LegalDocumentUpload onSuccess={handleUploadSuccess} />
-          </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

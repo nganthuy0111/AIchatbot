@@ -38,7 +38,31 @@ const Header = () => {
 
       {user ? (
         <div className="flex items-center space-x-4">
-          {/* You can add authenticated user links here */}
+          {/* Icon user chuyển sang trang profile */}
+          <button
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-green-400 transition-colors"
+            title="Profile"
+            onClick={() => navigate("/profile")}
+          >
+            <svg
+              className="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </button>
           <button
             onClick={handleLogout}
             className="bg-green-400 text-black py-2 px-4 rounded-md font-semibold hover:bg-green-500 transition-colors"

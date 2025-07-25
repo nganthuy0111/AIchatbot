@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   const navigate = useNavigate();
 
-  const handleChatBubbleClick = () => {
-    navigate("/chat");
-  };
-
   return (
     <div className="bg-black text-white text-center py-20 px-6">
       <div className="inline-block bg-green-900 bg-opacity-50 text-green-300 py-1 px-3 rounded-full text-sm font-semibold mb-4 border border-green-500">
@@ -29,7 +25,8 @@ const Hero = () => {
       >
         Start Now &rarr;
       </Link>
-      {/* Floating chat bubble button */}
+      {/* Floating chat bubble button (ẩn tạm thời) */}
+      {/*
       <button
         className="fixed bottom-6 right-6 z-50 bg-green-400 text-black rounded-full shadow-lg p-4 flex items-center justify-center hover:bg-green-500 transition-colors"
         aria-label="Chat with AI"
@@ -50,6 +47,16 @@ const Hero = () => {
             d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8l-4 1 1-4A8.96 8.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
           />
         </svg>
+      </button>
+      */}
+      {/* Nút ChatLegal mới */}
+      <button
+        className="fixed bottom-6 right-6 z-50 bg-blue-500 text-white rounded-full shadow-lg p-4 flex items-center justify-center hover:bg-blue-600 transition-colors"
+        aria-label="ChatLegal"
+        style={{ boxShadow: "0 4px 16px rgba(59,130,246,0.3)" }}
+        onClick={() => navigate("/chat-legal")}
+      >
+        <span className="font-bold text-lg">ChatLegal</span>
       </button>
     </div>
   );

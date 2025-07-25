@@ -13,6 +13,7 @@ import AboutPage from "./pages/AboutPage";
 import FeedbackPage from "./pages/FeedbackPage";
 import AdminManagementPage from "./pages/AdminManagementPage";
 import GeminiChatPage from "./pages/GeminiChatPage";
+import ChatLegalPage from "./pages/ChatLegalPage";
 import "./App.css";
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <Route path="/admin" element={<AdminManagementPage />} />
         <Route path="/management" element={<AdminManagementPage />} />
         <Route path="/gemini-chat" element={<GeminiChatPage />} />
+        <Route path="/chat-legal" element={<ChatLegalPage />} />
         {/* Add other routes here in the future */}
       </Routes>
     </Router>
