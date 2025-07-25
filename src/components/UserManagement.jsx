@@ -155,7 +155,14 @@ const UserManagement = () => {
               <tr key={user._id || user.id} className="hover:bg-gray-100">
                 {/* <td className="py-2 px-4 border-b text-left align-top">{user._id || user.id}</td> */}
                 <td className="py-2 px-4 border-b text-left align-top">
-                  {user.name || ""}
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={user.avatar || "https://i.pravatar.cc/40"}
+                      alt="avatar"
+                      className="w-7 h-7 rounded-full object-cover border border-gray-300"
+                    />
+                    <span>{user.name || ""}</span>
+                  </div>
                 </td>
                 <td className="py-2 px-4 border-b text-left align-top">
                   {user.email || ""}

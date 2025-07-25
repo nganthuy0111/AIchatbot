@@ -6,13 +6,18 @@ import apiClient from "../api/axios";
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { token } = useParams();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       toast.error("Passwords do not match.");
       return;
     }
@@ -25,9 +30,18 @@ const ResetPasswordPage = () => {
       );
       navigate("/login");
     } catch (error) {
-      if (error.response && error.response.status === 400) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+        toast.error(error.response.data.message);
+      } else if (error.response && error.response.status === 400) {
+        setError("Invalid or expired password reset token.");
         toast.error("Invalid or expired password reset token.");
       } else {
+        setError("Failed to reset password. Please try again.");
         toast.error("Failed to reset password. Please try again.");
       }
       console.error("Reset password error:", error);
@@ -47,14 +61,55 @@ const ResetPasswordPage = () => {
             <label className="block text-gray-400 mb-2" htmlFor="password">
               New Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 pr-10 focus:outline-none focus:border-green-500"
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                className="absolute inset-y-0 right-2 flex items-center text-gray-400 hover:text-green-400"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.03-10-9 0-1.61.49-3.13 1.4-4.45m2.1-2.1A9.98 9.98 0 0112 5c5.523 0 10 4.03 10 9 0 1.61-.49 3.13-1.4 4.45m-2.1 2.1A9.98 9.98 0 0112 19c-1.02 0-2.01-.13-2.96-.38M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm7.5 0c0 5-4.477 9-10 9S2.5 17 2.5 12 6.977 3 12.5 3s10 4.477 10 9z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
           <div className="mb-6">
             <label
@@ -63,15 +118,59 @@ const ResetPasswordPage = () => {
             >
               Confirm New Password
             </label>
-            <input
-              type="password"
-              id="confirm-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 pr-10 focus:outline-none focus:border-green-500"
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                className="absolute inset-y-0 right-2 flex items-center text-gray-400 hover:text-green-400"
+                onClick={() => setShowConfirmPassword((v) => !v)}
+                aria-label={
+                  showConfirmPassword ? "Hide password" : "Show password"
+                }
+              >
+                {showConfirmPassword ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.03-10-9 0-1.61.49-3.13 1.4-4.45m2.1-2.1A9.98 9.98 0 0112 5c5.523 0 10 4.03 10 9 0 1.61-.49 3.13-1.4 4.45m-2.1 2.1A9.98 9.98 0 0112 19c-1.02 0-2.01-.13-2.96-.38M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm7.5 0c0 5-4.477 9-10 9S2.5 17 2.5 12 6.977 3 12.5 3s10 4.477 10 9z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <button
             type="submit"
             disabled={loading}

@@ -45,9 +45,9 @@ const AdminManagementPage = () => {
         {/* User Info */}
         <div className="flex flex-col items-center mb-8">
           <img
-            src="https://i.pravatar.cc/60"
+            src={user.avatar || "https://i.pravatar.cc/60"}
             alt="avatar"
-            className="w-14 h-14 rounded-full mb-2 border-2 border-green-400"
+            className="w-14 h-14 rounded-full mb-2 border-2 border-green-400 object-cover"
           />
           <span className="text-xs text-gray-300">Welcome</span>
         </div>
@@ -86,17 +86,7 @@ const AdminManagementPage = () => {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <header className="flex items-center justify-between bg-black text-white px-8 py-4 shadow">
-          <div className="flex space-x-8">
-            <button className="font-semibold border-b-2 border-green-400 pb-1">
-              Statistic
-            </button>
-            <button className="font-semibold text-gray-300 hover:text-green-400">
-              Calendar
-            </button>
-            <button className="font-semibold text-gray-300 hover:text-green-400">
-              Employee
-            </button>
-          </div>
+          <div className="flex space-x-8"></div>
           <div className="flex items-center space-x-4">
             {/* Chỉ giữ lại một chuông thông báo, xóa nút chuông thứ hai */}
             <button className="relative">

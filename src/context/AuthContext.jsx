@@ -12,8 +12,9 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     const account_id = localStorage.getItem("account_id");
     const role = localStorage.getItem("role");
+    const avatar = localStorage.getItem("avatar");
     if (token && account_id && role) {
-      setUser({ token, account_id, role });
+      setUser({ token, account_id, role, avatar });
     } else {
       setUser(null);
     }
@@ -26,6 +27,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("account_id", userData.account_id); // Lưu cả account_id
     if (userData.role) {
       localStorage.setItem("role", userData.role);
+    }
+    if (userData.avatar) {
+      localStorage.setItem("avatar", userData.avatar);
     }
   };
 
@@ -48,6 +52,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("account_id"); // Xoá account_id khi logout
     localStorage.removeItem("role"); // Xoá role khi logout
+    localStorage.removeItem("avatar"); // Xoá avatar khi logout
   };
 
   return (
@@ -56,6 +61,8 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;
 
 export const useAuth = () => {
   return useContext(AuthContext);

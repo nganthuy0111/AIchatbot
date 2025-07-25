@@ -7,27 +7,48 @@ const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const handleNav = (section) => {
+    const el = document.getElementById(section);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/");
+    }
+  };
+
   const handleLogout = async () => {
     await logout(); // chỉ gọi logout từ context
     navigate("/login");
   };
 
   return (
-    <header className="flex justify-between items-center p-6 bg-black text-white">
+    <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 bg-black text-white shadow">
       <Link to="/" className="flex items-center">
         <img src={logo} alt="Logo" className="w-8 h-8 mr-2 object-contain" />
         <span className="text-xl font-bold">ELA</span>
       </Link>
 
       <nav className="flex items-center space-x-6">
-        <Link to="/" className="hover:text-gray-300">
+        <button
+          onClick={() => handleNav("home")}
+          className="hover:text-gray-300 bg-transparent border-none outline-none cursor-pointer"
+        >
           Home
-        </Link>
-        <Link to="/about" className="hover:text-gray-300">
+        </button>
+        <button
+          onClick={() => handleNav("about")}
+          className="hover:text-gray-300 bg-transparent border-none outline-none cursor-pointer"
+        >
           About
-        </Link>
-        <Link to="/feedback" className="hover:text-gray-300">
+        </button>
+        <button
+          onClick={() => handleNav("feedback")}
+          className="hover:text-gray-300 bg-transparent border-none outline-none cursor-pointer"
+        >
           Feedback
+        </button>
+        <Link to="/chat-legal" className="hover:text-gray-300">
+          Chat AI
         </Link>
         {user && user.role === "admin" && (
           <Link to="/management" className="hover:text-gray-300">
@@ -38,30 +59,17 @@ const Header = () => {
 
       {user ? (
         <div className="flex items-center space-x-4">
-          {/* Icon user chuyển sang trang profile */}
+          {/* Avatar user chuyển sang trang profile */}
           <button
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-green-400 transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-green-400 transition-colors overflow-hidden"
             title="Profile"
             onClick={() => navigate("/profile")}
           >
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
+            <img
+              src={user.avatar || "https://i.pravatar.cc/100"}
+              alt="avatar"
+              className="w-8 h-8 rounded-full object-cover"
+            />
           </button>
           <button
             onClick={handleLogout}

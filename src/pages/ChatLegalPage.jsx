@@ -3,11 +3,13 @@ import Header from "../components/Header";
 import { apiChatbotLawClient } from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { FaRegClock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const BOT_NAME = "LegalBot";
 
 const ChatLegalPage = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     {
       sender: "bot",
@@ -125,6 +127,28 @@ const ChatLegalPage = () => {
       <Header />
       <main className="flex-1 flex flex-col items-center justify-center px-2 py-8">
         <div className="w-full max-w-2xl flex flex-col h-[80vh] bg-[#18191A] rounded-2xl shadow-2xl p-6 md:p-10 relative">
+          {/* Back to home icon */}
+          <button
+            className="absolute top-4 left-4 text-white hover:text-green-400 transition-colors text-2xl"
+            title="Back to Home"
+            type="button"
+            onClick={() => navigate("/")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-7 h-7"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
           {/* Chat history icon */}
           <button
             className="absolute top-4 right-4 text-[#4ae168] hover:text-green-400 transition-colors text-2xl"

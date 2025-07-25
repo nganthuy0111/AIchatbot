@@ -29,5 +29,46 @@ apiClient.interceptors.response.use(
   }
 );
 
+export const getProfile = async (token) => {
+  try {
+    const response = await axios.get(
+      "https://be-edulaw-production.up.railway.app/api/profile/me",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
+export const updateProfile = async (data, token) => {
+  const formData = new FormData();
+  if (data.name) formData.append("name", data.name);
+  if (data.email) formData.append("email", data.email);
+  if (data.avatar) formData.append("avatar", data.avatar);
+
+  const response = await fetch(
+    "https://be-edulaw-production.up.railway.app/api/profile/me",
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // Không set Content-Type, để browser tự set boundary cho multipart
+      },
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
+  }
+  return await response.json();
+};
+
 export default apiClient;
 export { apiChatbotLawClient };
