@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
+import GeminiFloatingChatBubble from "../components/GeminiFloatingChatBubble";
 
 const HomePage = () => {
   return (
@@ -11,6 +12,7 @@ const HomePage = () => {
         <Hero />
       </main>
       <Footer />
+      <GeminiFloatingChatBubble />
     </div>
   );
 };

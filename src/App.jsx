@@ -11,6 +11,8 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChatPage from "./pages/ChatPage";
 import AboutPage from "./pages/AboutPage";
 import FeedbackPage from "./pages/FeedbackPage";
+import AdminManagementPage from "./pages/AdminManagementPage";
+import GeminiChatPage from "./pages/GeminiChatPage";
 import "./App.css";
 
 function App() {
@@ -38,6 +40,9 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/admin" element={<AdminManagementPage />} />
+        <Route path="/management" element={<AdminManagementPage />} />
+        <Route path="/gemini-chat" element={<GeminiChatPage />} />
         {/* Add other routes here in the future */}
       </Routes>
     </Router>

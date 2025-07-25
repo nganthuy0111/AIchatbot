@@ -24,7 +24,11 @@ const LoginPage = () => {
       });
 
       // Call login from context to update global state
-      login({ token: response.data.accessToken, account_id: response.data.user.id }); // Lưu đúng accessToken và account_id
+      login({
+        token: response.data.accessToken,
+        account_id: response.data.user.id,
+        role: response.data.user.role,
+      }); // Lưu cả role nếu có
 
       toast.success("Login successful!");
       navigate("/"); // Redirect to homepage on successful login

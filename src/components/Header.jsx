@@ -29,9 +29,11 @@ const Header = () => {
         <Link to="/feedback" className="hover:text-gray-300">
           Feedback
         </Link>
-        <Link to="/blog" className="hover:text-gray-300">
-          Blog
-        </Link>
+        {user && user.role === "admin" && (
+          <Link to="/management" className="hover:text-gray-300">
+            Management
+          </Link>
+        )}
       </nav>
 
       {user ? (
