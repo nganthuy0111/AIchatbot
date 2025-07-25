@@ -41,40 +41,45 @@ const FeedbackManagement = () => {
   return (
     <div className="overflow-x-auto">
       <h2 className="text-2xl font-bold mb-4 text-white">Danh sách Feedback</h2>
-      <table className="min-w-full bg-white rounded shadow text-sm">
+      <table className="min-w-full bg-gray-900 rounded-xl shadow-lg text-sm overflow-hidden">
         <thead>
-          <tr>
-            {/* Bỏ cột ID */}
-            <th className="py-2 px-4 border-b text-left">Người dùng</th>
-            <th className="py-2 px-4 border-b text-left min-w-[200px]">
+          <tr className="bg-gray-800 text-white">
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Người dùng
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left min-w-[200px] font-semibold">
               Nội dung
             </th>
-            <th className="py-2 px-4 border-b text-left">Trạng thái</th>
-            <th className="py-2 px-4 border-b text-left">Ngày tạo</th>
+
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Ngày tạo
+            </th>
           </tr>
         </thead>
         <tbody>
           {feedbacks && feedbacks.length > 0 ? (
             feedbacks.map((fb) => (
-              <tr key={fb._id} className="hover:bg-gray-100">
-                {/* Avatar và tên người dùng */}
-                <td className="py-2 px-4 border-b text-left align-top">
+              <tr
+                key={fb._id}
+                className="hover:bg-green-50/20 transition-colors"
+              >
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top">
                   <div className="flex items-center gap-2">
                     <img
                       src={fb.user_avatar || "https://i.pravatar.cc/40"}
                       alt="avatar"
                       className="w-7 h-7 rounded-full object-cover border border-gray-300"
                     />
-                    <span>{fb.user_name || fb.user_id || "Người dùng"}</span>
+                    <span className="font-medium text-white">
+                      {fb.name ? fb.name : "Ẩn danh"}
+                    </span>
                   </div>
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top break-words min-w-[200px] max-w-xs">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top break-words min-w-[200px] max-w-xs text-gray-200">
                   {fb.content}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
-                  {fb.status}
-                </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-400">
                   {formatDate(fb.createdAt)}
                 </td>
               </tr>

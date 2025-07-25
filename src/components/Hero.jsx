@@ -21,12 +21,15 @@ const Hero = () => {
         easy-to-understand information to help you solve legal issues in
         education effectively.
       </p>
-      <Link
-        to="/login"
-        className="bg-green-400 text-black py-3 px-6 rounded-md font-semibold text-lg hover:bg-green-500 transition-colors shadow-lg shadow-green-400/20 inline-block"
-      >
-        Start Now &rarr;
-      </Link>
+      {/* Nút Start Now chỉ hiện khi chưa đăng nhập */}
+      {!user && (
+        <Link
+          to="/login"
+          className="bg-green-400 text-black py-3 px-6 rounded-md font-semibold text-lg hover:bg-green-500 transition-colors shadow-lg shadow-green-400/20 inline-block"
+        >
+          Start Now &rarr;
+        </Link>
+      )}
       {/* Floating chat bubble button (ẩn tạm thời) */}
       {/*
       <button

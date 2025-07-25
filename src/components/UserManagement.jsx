@@ -135,54 +135,73 @@ const UserManagement = () => {
   return (
     <div className="overflow-x-auto">
       <h2 className="text-2xl font-bold mb-4 text-white">User List</h2>
-      <table className="min-w-full bg-white rounded shadow text-sm">
+      <table className="min-w-full bg-gray-900 rounded-xl shadow-lg text-sm overflow-hidden">
         <thead>
-          <tr>
-            {/* <th className="py-2 px-4 border-b text-left">ID</th> */}
-            <th className="py-2 px-4 border-b text-left">Name</th>
-            <th className="py-2 px-4 border-b text-left">Email</th>
-            <th className="py-2 px-4 border-b text-left">Role</th>
-            <th className="py-2 px-4 border-b text-left">Active</th>
-            <th className="py-2 px-4 border-b text-left">Email Verified</th>
-            <th className="py-2 px-4 border-b text-left">Last Login</th>
-            <th className="py-2 px-4 border-b text-left">Created At</th>
-            <th className="py-2 px-4 border-b text-left">Action</th>
+          <tr className="bg-gray-800 text-white">
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Name
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Email
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Role
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Active
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Email Verified
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Last Login
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Created At
+            </th>
+            <th className="py-3 px-4 border-b border-gray-700 text-left font-semibold">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
           {users && users.length > 0 ? (
             users.map((user) => (
-              <tr key={user._id || user.id} className="hover:bg-gray-100">
-                {/* <td className="py-2 px-4 border-b text-left align-top">{user._id || user.id}</td> */}
-                <td className="py-2 px-4 border-b text-left align-top">
+              <tr
+                key={user._id || user.id}
+                className="hover:bg-green-50/20 transition-colors"
+              >
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top">
                   <div className="flex items-center gap-2">
                     <img
                       src={user.avatar || "https://i.pravatar.cc/40"}
                       alt="avatar"
                       className="w-7 h-7 rounded-full object-cover border border-gray-300"
                     />
-                    <span>{user.name || ""}</span>
+                    <span className="font-medium text-white">
+                      {user.name || ""}
+                    </span>
                   </div>
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-200">
                   {user.email || ""}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-200">
                   {user.role || ""}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-200">
                   {user.isActive ? "✔️" : "❌"}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-200">
                   {user.isEmailVerified ? "✔️" : "❌"}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-400">
                   {formatDate(user.lastLoginAt)}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top text-gray-400">
                   {formatDate(user.createdAt)}
                 </td>
-                <td className="py-2 px-4 border-b text-left align-top">
+                <td className="py-3 px-4 border-b border-gray-800 text-left align-top">
                   <button
                     className="bg-blue-500 text-white px-3 py-1 rounded text-xs font-semibold hover:bg-blue-600"
                     onClick={() => setEditUser(user)}
