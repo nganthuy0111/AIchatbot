@@ -1,24 +1,68 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import logo from "../assets/logoEduLawAI.png";
 import UserManagement from "../components/UserManagement";
 import FeedbackManagement from "../components/FeedbackManagement";
 import LegalDocumentUpload from "../components/LegalDocumentUpload";
 import LegalDocumentList from "../components/LegalDocumentList";
 import ChatManagement from "../components/ChatManagement";
+import EditProfile from "./EditProfile";
+import apiClient from "../api/axios";
 
 const menuItems = [
-  { key: "dashboard", label: "Dashboard" },
   { key: "users", label: "User Management" },
   { key: "feedback", label: "Feedback Management" },
   { key: "legalClause", label: "Legal Clause" },
   { key: "legalDocument", label: "Legal Document" },
+  { key: "setting", label: "Setting" },
+  { key: "logout", label: "Logout" },
 ];
 
 const AdminManagementPage = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = React.useState("dashboard");
+  const [editing, setEditing] = React.useState(false);
+  const [profile, setProfile] = React.useState(null);
+  const [loadingProfile, setLoadingProfile] = React.useState(false);
+  const [errorProfile, setErrorProfile] = React.useState("");
+  const [sidebarAvatar, setSidebarAvatar] = React.useState("");
+
+  const fetchProfile = async () => {
+    setLoadingProfile(true);
+    setErrorProfile("");
+    try {
+      const token = localStorage.getItem("token");
+      const res = await apiClient.get("/profile/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProfile(res.data);
+    } catch {
+      setErrorProfile("Không thể tải thông tin cá nhân.");
+    }
+    setLoadingProfile(false);
+  };
+
+  React.useEffect(() => {
+    if (selectedMenu === "setting") fetchProfile();
+    // eslint-disable-next-line
+  }, [selectedMenu]);
+
+  React.useEffect(() => {
+    const fetchSidebarAvatar = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await apiClient.get("/profile/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSidebarAvatar(res.data.avatar || "");
+      } catch {
+        setSidebarAvatar("");
+      }
+    };
+    fetchSidebarAvatar();
+  }, []);
 
   if (!user || user.role !== "admin") {
     return <Navigate to="/login" replace />;
@@ -29,34 +73,29 @@ const AdminManagementPage = () => {
       {/* Sidebar */}
       <aside className="w-64 bg-black text-white flex flex-col p-4">
         {/* Logo */}
-        <div className="flex items-center mb-8">
+        <div
+          className="flex items-center mb-8 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <img
             src={logo}
             alt="Logo"
             className="w-10 h-10 mr-2 object-contain"
           />
-          <span
-            className="font-bold text-xl cursor-pointer transition-colors hover:text-green-400"
-            onClick={() => (window.location.href = "/")}
-          >
+          <span className="font-bold text-xl transition-colors hover:text-green-400">
             ELA
           </span>
         </div>
         {/* User Info */}
         <div className="flex flex-col items-center mb-8">
           <img
-            src={user.avatar || "https://i.pravatar.cc/60"}
+            src={sidebarAvatar || "https://i.pravatar.cc/60"}
             alt="avatar"
             className="w-14 h-14 rounded-full mb-2 border-2 border-green-400 object-cover"
           />
           <span className="text-xs text-gray-300">Welcome</span>
         </div>
         {/* Search */}
-        <input
-          type="text"
-          placeholder="Type to search..."
-          className="mb-4 px-3 py-2 rounded bg-gray-800 text-white placeholder-gray-400 focus:outline-none"
-        />
         {/* Menu */}
         <nav className="flex-1">
           <ul>
@@ -68,7 +107,14 @@ const AdminManagementPage = () => {
                       ? "bg-green-400 text-black"
                       : "hover:bg-gray-900 text-white"
                   }`}
-                  onClick={() => setSelectedMenu(item.key)}
+                  onClick={() => {
+                    if (item.key === "logout") {
+                      logout();
+                      navigate("/login");
+                    } else {
+                      setSelectedMenu(item.key);
+                    }
+                  }}
                 >
                   {item.label}
                   {item.key === "dashboard" && (
@@ -101,31 +147,6 @@ const AdminManagementPage = () => {
                 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </button>
-            {/* Icon user chuyển sang trang profile */}
-            <button
-              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-green-400 transition-colors"
-              title="Profile"
-              onClick={() => (window.location.href = "/profile")}
-            >
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-            </button>
             {/* Bỏ hiển thị id, chỉ giữ lại chữ Admin */}
             <span className="font-semibold">Admin</span>
           </div>
@@ -147,6 +168,48 @@ const AdminManagementPage = () => {
           ) : selectedMenu === "legalDocument" ? (
             <div className="col-span-3">
               <LegalDocumentUpload />
+            </div>
+          ) : selectedMenu === "setting" ? (
+            <div className="col-span-3 flex flex-col items-center justify-center h-full">
+              <div className="bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-md flex flex-col items-center mt-8">
+                <h2 className="text-2xl font-bold mb-4 text-white">
+                  Thông tin cá nhân
+                </h2>
+                {loadingProfile ? (
+                  <div className="text-gray-300">Đang tải...</div>
+                ) : errorProfile ? (
+                  <div className="text-red-400">{errorProfile}</div>
+                ) : profile ? (
+                  <>
+                    <img
+                      src={profile.avatar || "https://i.pravatar.cc/100"}
+                      alt="avatar"
+                      className="w-20 h-20 rounded-full border-4 border-green-400 mb-4 object-cover"
+                    />
+                    <div className="mb-2 text-white font-semibold">
+                      {profile.name || profile.fullName || "No Name"}
+                    </div>
+                    <div className="mb-4 text-gray-300">{profile.email}</div>
+                    {!editing ? (
+                      <button
+                        className="bg-green-400 text-black px-6 py-2 rounded font-semibold hover:bg-green-500 transition-colors mb-2"
+                        onClick={() => setEditing(true)}
+                      >
+                        Cập nhật thông tin
+                      </button>
+                    ) : (
+                      <EditProfile
+                        user={profile}
+                        onSuccess={() => {
+                          setEditing(false);
+                          fetchProfile();
+                        }}
+                        onCancel={() => setEditing(false)}
+                      />
+                    )}
+                  </>
+                ) : null}
+              </div>
             </div>
           ) : (
             <>

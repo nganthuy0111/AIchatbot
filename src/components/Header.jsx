@@ -2,10 +2,27 @@ import React from "react";
 import logo from "../assets/logoEduLawAI.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import apiClient from "../api/axios";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [headerAvatar, setHeaderAvatar] = React.useState("");
+
+  React.useEffect(() => {
+    const fetchHeaderAvatar = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await apiClient.get("/profile/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setHeaderAvatar(res.data.avatar || "");
+      } catch {
+        setHeaderAvatar("");
+      }
+    };
+    fetchHeaderAvatar();
+  }, []);
 
   const handleNav = (section) => {
     const el = document.getElementById(section);
@@ -23,10 +40,13 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 bg-black text-white shadow">
-      <Link to="/" className="flex items-center">
+      <span
+        className="flex items-center cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <img src={logo} alt="Logo" className="w-8 h-8 mr-2 object-contain" />
         <span className="text-xl font-bold">ELA</span>
-      </Link>
+      </span>
 
       <nav className="flex items-center space-x-6">
         <button
@@ -66,7 +86,7 @@ const Header = () => {
             onClick={() => navigate("/profile")}
           >
             <img
-              src={user.avatar || "https://i.pravatar.cc/100"}
+              src={headerAvatar || "https://i.pravatar.cc/100"}
               alt="avatar"
               className="w-8 h-8 rounded-full object-cover"
             />
