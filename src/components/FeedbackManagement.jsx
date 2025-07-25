@@ -44,8 +44,8 @@ const FeedbackManagement = () => {
       <table className="min-w-full bg-white rounded shadow text-sm">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b text-left">ID</th>
-            <th className="py-2 px-4 border-b text-left">User ID</th>
+            {/* Bỏ cột ID */}
+            <th className="py-2 px-4 border-b text-left">Người dùng</th>
             <th className="py-2 px-4 border-b text-left min-w-[200px]">
               Nội dung
             </th>
@@ -57,11 +57,16 @@ const FeedbackManagement = () => {
           {feedbacks && feedbacks.length > 0 ? (
             feedbacks.map((fb) => (
               <tr key={fb._id} className="hover:bg-gray-100">
+                {/* Avatar và tên người dùng */}
                 <td className="py-2 px-4 border-b text-left align-top">
-                  {fb._id}
-                </td>
-                <td className="py-2 px-4 border-b text-left align-top">
-                  {fb.user_id}
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={fb.user_avatar || "https://i.pravatar.cc/40"}
+                      alt="avatar"
+                      className="w-7 h-7 rounded-full object-cover border border-gray-300"
+                    />
+                    <span>{fb.user_name || fb.user_id || "Người dùng"}</span>
+                  </div>
                 </td>
                 <td className="py-2 px-4 border-b text-left align-top break-words min-w-[200px] max-w-xs">
                   {fb.content}
@@ -76,7 +81,7 @@ const FeedbackManagement = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="py-4 text-center text-gray-500">
+              <td colSpan="4" className="py-4 text-center text-gray-500">
                 Không có feedback nào.
               </td>
             </tr>

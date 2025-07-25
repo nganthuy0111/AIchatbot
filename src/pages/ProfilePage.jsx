@@ -51,7 +51,7 @@ const ProfilePage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-900">
       <Header />
-      <main className="flex-1 flex flex-col items-center py-12">
+      <main className="flex-1 flex flex-col items-center py-12 mt-16 md:mt-24">
         {editing ? (
           <EditProfile
             user={user}
